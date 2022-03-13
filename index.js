@@ -25,6 +25,7 @@ const {
   productRouters,
   registerRouter,
   cartRouters,
+  transactionRouters,
 } = require("./routers");
 
 // //Test db connection
@@ -38,6 +39,7 @@ app.use("/users", userRouters);
 app.use("/products", productRouters);
 app.use("/", registerRouter);
 app.use("/cart", cartRouters);
+app.use("/transaction", transactionRouters);
 
 app.listen(PORT, () => console.log("Api Running :", PORT));
 
