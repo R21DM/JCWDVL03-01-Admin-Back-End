@@ -1,12 +1,19 @@
 const mysql = require("mysql");
 
+// const db = mysql.createPool({
+//   host: "127.0.0.1",
+//   user: "root",
+//   password: "@Alfath123",
+//   database: "db_pharmacy",
+//   port: 3306,
+//   multipleStatements: true,
+// });
+
 const db = mysql.createPool({
-  host: "127.0.0.1",
-  user: "root",
-  password: "@Alfath123",
+  host: "localhost",
+  user: "test",
+  password: "test",
   database: "db_pharmacy",
-  port: 3306,
-  multipleStatements: true,
 });
 
 db.getConnection((err, connection) => {
@@ -17,12 +24,3 @@ db.getConnection((err, connection) => {
 });
 
 module.exports = db;
-
-// const connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "test",
-//   password: "test",
-//   database: "db_pharmacy",
-// });
-
-// module.exports = connection;

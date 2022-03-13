@@ -5,7 +5,6 @@ const cors = require("cors");
 // const db = require("./database");
 //PORT
 const PORT = process.env.PORT || 2001;
-// const PORT = 8000;
 
 const app = express();
 
