@@ -160,4 +160,12 @@ module.exports = {
       res.status(200).send(results);
     });
   },
+  showAllUser: (req, res) => {
+    const QUERY = "SELECT * FROM db_pharmacy.user;";
+
+    db.query(QUERY, (err, result) => {
+      if (err) res.status(500).send(err);
+      res.status(200).send(result);
+    });
+  },
 };

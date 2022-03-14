@@ -1,12 +1,8 @@
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
-// const http = require("http");
-// const server = http.createServer(app);
 const db = require("./database");
-//PORT
 const PORT = process.env.PORT || 2001;
-// const PORT = 8000;
 
 const app = express();
 
@@ -46,6 +42,7 @@ const {
   productRouters,
   registerRouter,
   cartRouters,
+  transactionRouters,
 } = require("./routers");
 
 // //Test db connection
@@ -59,6 +56,7 @@ app.use("/users", userRouters);
 app.use("/products", productRouters);
 app.use("/", registerRouter);
 app.use("/cart", cartRouters);
+app.use("/transaction", transactionRouters);
 
 app.listen(PORT, () => console.log("Api Running :", PORT));
 
