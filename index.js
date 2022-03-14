@@ -1,17 +1,37 @@
 const express = require("express");
+const multer = require("multer");
 const cors = require("cors");
 // const http = require("http");
 // const server = http.createServer(app);
-// const db = require("./database");
+const db = require("./database");
 //PORT
 const PORT = process.env.PORT || 2001;
 // const PORT = 8000;
 
 const app = express();
 
+/////////////////////////////////////////////
+//Multer configuration for Upload Image
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${req.query.name}.jpg`);
+  },
+});
+
+const upload = multer({
+  storage: multerStorage,
+});
+
+//Upload Image
+app.post("/", upload.single("uploaded-file"), (req, res) => {});
+
+///////////////////////////////////////////////////
+
 // Function to serve all static files
 // inside public directory.
-
 app.use("/products", express.static("public"));
 
 app.use(cors());

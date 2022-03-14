@@ -98,13 +98,23 @@ module.exports = {
   },
 
   getLog: (req, res) => {
-    let scriptQuery = "SELECT * FROM product_log";
+    let scriptQuery = "SELECT * FROM product_log where detail = 'Sold'";
 
     db.query(scriptQuery, (err, results) => {
       if (err) res.status(500).send(err);
       res.status(200).send(results);
     });
   },
+  getMostSold: (req, res) => {
+    let scriptQuery =
+      "SELECT product_name, sum(qty) as jumlah from product_log where detail = 'Sold' group by product_id order by length(jumlah) desc, jumlah desc;";
+
+    db.query(scriptQuery, (err, results) => {
+      if (err) res.status(500).send(err);
+      res.status(200).send(results);
+    });
+  },
+
   addData: (req, res) => {
     console.log(req.body);
     let { username, password, email, phone } = req.body;
@@ -139,7 +149,7 @@ module.exports = {
       dataUpdate.push(`${prop} = ${db.escape(req.body[prop])}`);
     }
 
-    let updateQuery = `UPDATE user set ${dataUpdate} where id = ${req.params.id};`;
+    let updateQuery = `UPDATE product set ${dataUpdate} where id = ${req.params.id};`;
     console.log(updateQuery);
     db.query(updateQuery, (err, results) => {
       if (err) res.status(500).send(err);
@@ -147,7 +157,7 @@ module.exports = {
     });
   },
   deleteData: (req, res) => {
-    let deleteQuery = `DELETE from user where id = ${db.escape(
+    let deleteQuery = `DELETE from product where id = ${db.escape(
       req.params.id
     )};`;
 
