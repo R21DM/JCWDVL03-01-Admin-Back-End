@@ -1,11 +1,10 @@
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
-const db = require("./database");
-const PORT = process.env.PORT || 2001;
-
 const app = express();
+require("dotenv").config();
 
+const PORT = process.env.PORT || 2001;
 /////////////////////////////////////////////
 //Multer configuration for Upload Image
 const multerStorage = multer.diskStorage({
@@ -45,13 +44,6 @@ const {
   transactionRouters,
 } = require("./routers");
 
-// //Test db connection
-// db.connect((error) => {
-//   if (error) console.log(error);
-
-//   console.log("Connected at thread id", db.threadId);
-// });
-
 app.use("/users", userRouters);
 app.use("/products", productRouters);
 app.use("/", registerRouter);
@@ -59,8 +51,3 @@ app.use("/cart", cartRouters);
 app.use("/transaction", transactionRouters);
 
 app.listen(PORT, () => console.log("Api Running :", PORT));
-
-// //Start Server
-// server.listen(PORT, () => {
-//   console.log("Socket server is running at port:", PORT);
-// });
