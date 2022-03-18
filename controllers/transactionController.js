@@ -22,4 +22,20 @@ const getTransactionsByID = (req, res) => {
   });
 };
 
-module.exports = { getTransactions, getTransactionsByID };
+//PUT transactions status
+const changeTransactionStatus = (req, res) => {
+  const ID = req.body.id;
+  const ACT = req.body.act;
+  const QUERY = `UPDATE invoice_user_header SET status = '${ACT}' WHERE (id = ${ID});`;
+
+  db.query(QUERY, (err, result) => {
+    console.log(QUERY);
+    res.status(200).send(result);
+  });
+};
+
+module.exports = {
+  getTransactions,
+  getTransactionsByID,
+  changeTransactionStatus,
+};
