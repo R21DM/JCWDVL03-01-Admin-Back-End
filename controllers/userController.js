@@ -23,6 +23,7 @@ module.exports = {
     db.query(queryUsername, async (err, results) => {
       if (err) return res.status(500).send(err);
       if (results.length !== 1) return res.status(500).send("User not found");
+      if (results[0].role !== 1) return res.status(500).send("User not found");
       let user = results[0];
 
       let stored_hash = user.password;

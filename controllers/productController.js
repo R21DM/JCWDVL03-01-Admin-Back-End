@@ -90,6 +90,10 @@ module.exports = {
       scriptQuery = `SELECT * FROM product WHERE id=${ID}`;
       console.log(scriptQuery);
     }
+    if (req.query.sort) {
+      scriptQuery += ` order by price ${req.query.sort}`;
+      console.log(scriptQuery);
+    }
 
     db.query(scriptQuery, (err, results) => {
       if (err) res.status(500).send(err);
@@ -105,6 +109,18 @@ module.exports = {
       res.status(200).send(results);
     });
   },
+  getTotal: (req, res) => {
+    let scriptQuery = `SELECT  product_name, price, cost, sum(qty) as qty, 
+    (sum(qty)*price - sum(qty)*cost) as total_profit,
+    (sum(qty)*cost) as total_cost, (sum(qty)*price) as revenue from product_log l 
+    join product p on p.name = l.product_name  where detail = 'Sold' group by p.id; `;
+
+    db.query(scriptQuery, (err, results) => {
+      if (err) res.status(500).send(err);
+      console.log(results);
+      res.status(200).send(results);
+    });
+  },
   getMostSold: (req, res) => {
     let scriptQuery =
       "SELECT product_name, sum(qty) as jumlah from product_log where detail = 'Sold' group by product_id order by length(jumlah) desc, jumlah desc;";
@@ -117,26 +133,39 @@ module.exports = {
 
   addData: (req, res) => {
     console.log(req.body);
-    let { username, password, email, phone } = req.body;
-    let addDataUser = `Insert into user values (null,
-    ${db.escape(username)},
-    ${db.escape(password)},
-    ${db.escape(email)},
-    ${db.escape(phone)});`;
-    console.log(addDataUser);
-    db.query(addDataUser, (err, results) => {
+    let {
+      name,
+      price,
+      volume,
+      volume_per_bottle,
+      unit,
+      description,
+      brand,
+      drug_class,
+      before_taking,
+      dosage,
+      type,
+    } = req.body;
+    let addProduct = `INSERT INTO db_pharmacy.product (name, price, volume, volume_per_bottle,unit, 
+                      description,brand, drug_class, before_taking,dosage,type)
+                       values  (
+                    "${name}", ${price}, ${volume}, ${volume_per_bottle},
+                    "${unit}", "${description}", "${brand}", "${drug_class}","${before_taking}",
+                    "${dosage}", "${type}" )  ;`;
+    console.log(addProduct);
+    db.query(addProduct, (err, results) => {
       if (err) {
         console.log(err);
         res.status(500).send(err);
       }
 
       db.query(
-        `Select * from user where username = ${db.escape(username)};`,
+        `Select * from product where name = ${db.escape(name)};`,
         (err2, results2) => {
           if (err2) res.status(500).send(err2);
           res
             .status(200)
-            .send({ message: "Penambahan Karyawan Berhasil", data: results2 });
+            .send({ message: "Penambahan Product Berhasil", data: results2 });
           // res.status(200).send(results)
         }
       );
@@ -148,8 +177,9 @@ module.exports = {
     for (let prop in req.body) {
       dataUpdate.push(`${prop} = ${db.escape(req.body[prop])}`);
     }
-
-    let updateQuery = `UPDATE product set ${dataUpdate}, filename = name where id = ${req.params.id};`;
+    let data = dataUpdate.splice(1);
+    console.log(data);
+    let updateQuery = `UPDATE product set ${data} where id = ${req.params.id};`;
     console.log(updateQuery);
     db.query(updateQuery, (err, results) => {
       if (err) res.status(500).send(err);
