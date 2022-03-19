@@ -161,8 +161,22 @@ module.exports = {
       res.status(200).send(results);
     });
   },
+
+  //Show all user function
   showAllUser: (req, res) => {
     const QUERY = "SELECT * FROM db_pharmacy.user;";
+
+    db.query(QUERY, (err, result) => {
+      if (err) res.status(500).send(err);
+      res.status(200).send(result);
+    });
+  },
+
+  //Changing user status (active - deactive) function
+  changeActiveUser: (req, res) => {
+    const ID = req.body.id;
+    const STATUS = req.body.status;
+    const QUERY = `UPDATE db_pharmacy.user SET verified_user = ${STATUS} WHERE (id = ${ID});`;
 
     db.query(QUERY, (err, result) => {
       if (err) res.status(500).send(err);
