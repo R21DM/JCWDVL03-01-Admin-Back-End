@@ -12,5 +12,6 @@ routers.patch("/edit-user/:id", userController.editData);
 routers.delete("/delete-user/:iduser", userController.deleteData);
 routers.get("/showAllUser", userController.showAllUser);
 routers.post("/status", userController.changeActiveUser);
+routers.get("/username/:id", userController.getUsername);
 
 module.exports = routers;

@@ -184,6 +184,18 @@ module.exports = {
     });
   },
 
+  //GET username by ID
+  getUsername: (req, res) => {
+    const USERID = req.params.id;
+    const QUERY = `SELECT username FROM db_pharmacy.user WHERE id = ${USERID};`;
+
+    db.query(QUERY, (err, result) => {
+      if (err) res.status(500).send(err);
+      console.log(QUERY);
+      res.status(200).send(result);
+    });
+  },
+
   //Changing user status (active - deactive) function
   changeActiveUser: (req, res) => {
     const ID = req.body.id;
