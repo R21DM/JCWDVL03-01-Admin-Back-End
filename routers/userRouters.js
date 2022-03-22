@@ -3,6 +3,8 @@ const { userController } = require("../controllers");
 const routers = express.Router();
 
 routers.post("/get", userController.getData);
+routers.get("/getAll", userController.getAllData);
+routers.post("/change-pass", userController.changePass);
 routers.get("/get", userController.getEmail);
 routers.get("/send", userController.forgotEmail);
 routers.post("/add-user", userController.addData);
