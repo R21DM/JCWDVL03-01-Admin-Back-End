@@ -110,9 +110,9 @@ module.exports = {
     });
   },
   getTotal: (req, res) => {
-    let scriptQuery = `SELECT  product_name, price, cost, sum(qty) as qty, 
+    let scriptQuery = `SELECT product_name, price, cost, sum(qty) as qty, 
     (sum(qty)*price - sum(qty)*cost) as total_profit,
-    (sum(qty)*cost) as total_cost, (sum(qty)*price) as revenue from product_log l 
+    (sum(qty)*cost) as total_cost, (sum(qty)*price) as revenue, l.update_at from product_log l 
     join product p on p.name = l.product_name  where detail = 'Sold' group by p.id; `;
 
     db.query(scriptQuery, (err, results) => {
@@ -123,7 +123,7 @@ module.exports = {
   },
   getMostSold: (req, res) => {
     let scriptQuery =
-      "SELECT product_name, sum(qty) as jumlah from product_log where detail = 'Sold' group by product_id order by length(jumlah) desc, jumlah desc;";
+      "SELECT create_at, product_name, sum(qty) as jumlah from product_log where detail = 'Sold' group by product_id order by length(jumlah) desc, jumlah desc;";
 
     db.query(scriptQuery, (err, results) => {
       if (err) res.status(500).send(err);
